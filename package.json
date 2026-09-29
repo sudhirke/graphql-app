@@ -20,13 +20,16 @@
   "license": "ISC",
   "author": "Sudhir Kesharwani - SPXPERT",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
+    "start:dev": "nodemon ./src/index",
+    "start": "node ./src/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "^5.2.1",
     "nodemon": "^3.1.14",
+    "pg": "^8.23.0",
     "typescript": "^7.0.2"
   }
 }
