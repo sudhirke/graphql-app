@@ -1,0 +1,32 @@
+{
+  "name": "graphql-app",
+  "version": "1.0.0",
+  "description": "GraphQL based posts application",
+  "keywords": [
+    "graphql",
+    "express",
+    "nodejs",
+    "postgres",
+    "docker"
+  ],
+  "homepage": "https://github.com/sudhirke/graphql-app#readme",
+  "bugs": {
+    "url": "https://github.com/sudhirke/graphql-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudhirke/graphql-app.git"
+  },
+  "license": "ISC",
+  "author": "Sudhir Kesharwani - SPXPERT",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14",
+    "typescript": "^7.0.2"
+  }
+}
