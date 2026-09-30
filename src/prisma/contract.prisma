@@ -1,0 +1,25 @@
+// use prisma-8
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+  profileImageURL  String? @map("profile_image_url")
+  password String
+  salt String
+  posts     Post[]
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+  
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
