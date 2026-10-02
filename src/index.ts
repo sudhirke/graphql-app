@@ -1,8 +1,8 @@
 import express from "express";
-import { expressMiddleware } from '@as-integrations/express5';
-import {createGraphQLServer} from "./graphql/index.js";
+import { expressMiddleware } from "@as-integrations/express5";
+import { createGraphQLServer } from "./graphql/index.js";
 import cors from "cors";
-
+import { db } from "./lib/db.js";
 
 process.loadEnvFile();
 
@@ -17,7 +17,7 @@ async function start() {
     "/graphql",
     cors<cors.CorsRequest>(),
     express.json(),
-    expressMiddleware(await createGraphQLServer()),////create graphQL server from the componenets in graphql/index.ts
+    expressMiddleware(await createGraphQLServer()), ////create graphQL server from the componenets in graphql/index.ts
   );
 
   app.get("/", (req, res) => {
