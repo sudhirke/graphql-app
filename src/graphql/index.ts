@@ -6,6 +6,8 @@ async function createGraphQLServer()
   //create graphQL server by passing TypeDefs and Resolvers
   const gqlServer = new ApolloServer({
     typeDefs: `
+      ${UserQL.typeDefs}
+
       type Query {
       ${UserQL.queries}
       }
