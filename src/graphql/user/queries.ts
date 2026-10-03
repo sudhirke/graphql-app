@@ -1,5 +1,4 @@
 export const queries = `#graphql
+    getUserToken(email: String!, password: String!): String
     users: [User!]!
-    hello: String
-    sayMyName(name:String): String
   `;
