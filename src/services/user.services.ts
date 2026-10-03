@@ -1,12 +1,19 @@
 import { db } from "../lib/db.js";
 import { createHmac, randomBytes } from "node:crypto";
-
+import JWT from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 export interface CreateUserPayload {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   profile_image_url: string;
+}
+
+export interface GetUserTokenPayload {
+  email: string;
+  password: string;
 }
 
 class UserServices {
@@ -18,6 +25,19 @@ class UserServices {
       "email",
       "profileImageURL",
     ).all();
+  }
+
+  private static async getUserByEmail(email: string) {
+    return await db.orm.public.User.select(
+      "id",
+      "firstName",
+      "lastName",
+      "email",
+      "password",
+      "salt",
+    )
+      .where({ email: email })
+      .first();
   }
 
   public static async createUser(payload: CreateUserPayload) {
@@ -49,6 +69,45 @@ class UserServices {
       });
 
     // Add your implementation here
+  }
+
+  // Implement the getUserToken method to retrieve a user token based on email and password
+  public static async getUserToken(payload: GetUserTokenPayload) {
+    const { email, password } = payload;
+
+    // Implement the logic to retrieve a user token based on the provided email and password
+    // For example, you might want to check the credentials against a database and generate a token
+
+    const user = await this.getUserByEmail(email);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const hashedPassword = createHmac("sha256", user.salt)
+      .update(password)
+      .digest("hex");
+
+    if (hashedPassword !== user.password) {
+      throw new Error("Invalid credentials");
+    }
+
+    // Generate a token (for example, using JWT)
+    const token = JWT.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      process.env.JWT_SECRET || "UHfTBCsNIb",
+      {
+        expiresIn: "1h",
+      },
+    ); // Replace with actual token generation logic
+
+    //return the generated token
+    return { token };
   }
 }
 

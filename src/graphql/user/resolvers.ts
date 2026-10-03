@@ -2,7 +2,17 @@ import UserServices, {
   type CreateUserPayload,
 } from "../../services/user.services.js";
 const queries = {
-  users: () => UserServices.getUsers(),
+  users: async () => {
+    return await UserServices.getUsers();
+  },
+  getUserToken: async (
+    _: any,
+    payload: { email: string; password: string },
+  ) => {
+    const { email, password } = payload;
+    const user = await UserServices.getUserToken({ email, password });
+    return user.token;
+  },
 };
 
 const mutations = {
