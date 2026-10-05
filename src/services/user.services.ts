@@ -27,7 +27,7 @@ class UserServices {
     ).all();
   }
 
-  private static async getUserByEmail(email: string) {
+  public static async getUserByEmail(email: string) {
     return await db.orm.public.User.select(
       "id",
       "firstName",
@@ -37,6 +37,18 @@ class UserServices {
       "salt",
     )
       .where({ email: email })
+      .first();
+  }
+
+  public static async getUserById(userId: number) {
+    return await db.orm.public.User.select(
+      "id",
+      "firstName",
+      "lastName",
+      "email",
+      "profileImageURL",
+    )
+      .where({ id: userId })
       .first();
   }
 
@@ -108,6 +120,27 @@ class UserServices {
 
     //return the generated token
     return { token };
+  }
+
+  //decode the token and verify it and return the user details
+  public static async verifyUserToken(token: string) {
+    try {
+      const decoded = JWT.verify(
+        token,
+        process.env.JWT_SECRET || "UHfTBCsNIb",
+      ) as {
+        userId: number;
+        email: string;
+        firstName: string;
+        lastName: string;
+      };
+
+      console.log("Decoded token:", decoded);
+
+      return decoded;
+    } catch (error) {
+      throw new Error("Invalid token");
+    }
   }
 }
 

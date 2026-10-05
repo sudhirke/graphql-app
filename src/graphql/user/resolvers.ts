@@ -13,6 +13,13 @@ const queries = {
     const user = await UserServices.getUserToken({ email, password });
     return user.token;
   },
+  getLoggedInUser: async (_: any, parameters: any, context: any) => {
+    if (!context.user || !context.user) {
+      throw new Error("User not authenticated");
+    }
+    //const user = await UserServices.getUserByEmail(email);
+    return context.user;
+  },
 };
 
 const mutations = {

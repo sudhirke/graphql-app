@@ -3,6 +3,7 @@ import { expressMiddleware } from "@as-integrations/express5";
 import { createGraphQLServer } from "./graphql/index.js";
 import cors from "cors";
 import { db } from "./lib/db.js";
+import UserServices from "./services/user.services.js";
 
 process.loadEnvFile();
 
@@ -17,7 +18,20 @@ async function start() {
     "/graphql",
     cors<cors.CorsRequest>(),
     express.json(),
-    expressMiddleware(await createGraphQLServer()), ////create graphQL server from the componenets in graphql/index.ts
+    expressMiddleware(await createGraphQLServer(), {
+      context: async ({ req }) => {
+        const token = req.headers["token"]?.toString() || "";
+        //console.log("Token from request headers:", token);
+
+        try {
+          const user = UserServices.verifyUserToken(token as string);
+          return { user };
+        } catch (error) {
+          throw new Error("Invalid token");
+        }
+      },
+    }),
+    ////create graphQL server from the componenets in graphql/index.ts
   );
 
   app.get("/", (req, res) => {
